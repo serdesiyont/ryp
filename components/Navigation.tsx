@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/auth/auth-provider";
 import { authClient } from "@/lib/auth-client";
@@ -24,12 +25,15 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
     "professors"
   );
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showMobileSuggestions, setShowMobileSuggestions] = useState(false);
   const [profQuery, setProfQuery] = useState("");
   const [schoolQuery, setSchoolQuery] = useState("");
   const { results, count, loading, search } = useSearch();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,6 +49,13 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
         !mobileMenuRef.current.contains(event.target as Node)
       ) {
         setShowMobileMenu(false);
+      }
+      if (
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(event.target as Node)
+      ) {
+        setShowMobileSearch(false);
+        setShowMobileSuggestions(false);
       }
       if (
         suggestionsRef.current &&
@@ -69,6 +80,8 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
 
   const handleResultClick = (id: string, type: "professors" | "schools") => {
     setShowSuggestions(false);
+    setShowMobileSuggestions(false);
+    setShowMobileSearch(false);
     if (type === "professors") {
       router.push(`/professor/${id}`);
     } else {
@@ -88,8 +101,8 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
             {queryText.trim().length < 3
               ? "Type at least 3 characters"
               : count === 0
-                ? "No matches yet"
-                : "Searching..."}
+              ? "No matches yet"
+              : "Searching..."}
           </div>
         ) : (
           results.map((item) => (
@@ -112,92 +125,209 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
   };
 
   return (
-    <header
-      className="bg-black text-white flex items-center justify-between px-4 lg:px-6 xl:px-12 py-3 z-50"
-    >
+    <header className="relative z-100 bg-black text-white flex items-center justify-between px-4 lg:px-6 xl:px-12 py-3">
       {/* Mobile Layout */}
       <div className="lg:hidden flex items-center justify-between w-full">
         {/* Mobile Logo */}
-        <Link href="/" className="text-xl font-bold bg-white text-black px-3 py-1 rounded">
+        <Link
+          href="/"
+          className="text-xl font-bold bg-white text-black px-3 py-1 rounded"
+        >
           RYP
         </Link>
 
         {/* Mobile Menu Icon */}
-        <div className="relative" ref={mobileMenuRef}>
-          <button
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="text-2xl p-2"
-            aria-label="Open menu"
-          >
-            ☰
-          </button>
-
-          {showMobileMenu && (
-            <div className="absolute right-0 top-full mt-2 bg-white text-black rounded-lg shadow-lg py-2 w-56">
-              <Link
-                href="/browse"
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                onClick={() => setShowMobileMenu(false)}
+        <div className="flex items-center gap-1">
+          {!isHomepage && (
+            <div className="relative" ref={mobileSearchRef}>
+              <button
+                onClick={() => setShowMobileSearch(!showMobileSearch)}
+                className="p-2"
+                aria-label="Open search"
               >
-                Browse
-              </Link>
-              {!isLoggedIn ? (
-                <>
-                  <Link
-                    href="/login"
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Log In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/lecturer/add"
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Add a Lecturer
-                  </Link>
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Profile
-                  </Link>
-                  <Link
-                    href="/my-ratings"
-                    className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                    onClick={() => setShowMobileMenu(false)}
-                  >
-                    Your Ratings
-                  </Link>
+                <Search className="h-6 w-6" aria-hidden="true" />
+              </button>
 
-                  <div className="border-t border-gray-200 my-1" />
-                  <button
-                    onClick={async () => {
-                      await authClient.signOut();
-                      setShowMobileMenu(false);
-                      router.push("/");
-                      router.refresh();
-                    }}
-                    className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                  >
-                    Logout
-                  </button>
-                </>
+              {showMobileSearch && (
+                <div className="fixed left-0 right-0 top-16 z-120 w-screen border border-gray-600 bg-black p-4 shadow-lg">
+                  <div className="flex flex-col gap-3">
+                    <div className="relative">
+                      <select
+                        value={searchType}
+                        onChange={(e) =>
+                          handleSearchTypeChange(
+                            e.target.value as "professors" | "schools"
+                          )
+                        }
+                        className="w-full appearance-none rounded border border-gray-600 bg-transparent px-3 py-2 pr-8 text-sm font-medium"
+                      >
+                        <option value="professors" className="bg-black">
+                          Professors
+                        </option>
+                        <option value="schools" className="bg-black">
+                          Schools
+                        </option>
+                      </select>
+                      <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs">
+                        ▼
+                      </span>
+                    </div>
+
+                    {searchType === "professors" ? (
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={profQuery}
+                          onFocus={() => setShowMobileSuggestions(true)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setProfQuery(value);
+                            search({ mode: "professors", query: value });
+                            setShowMobileSuggestions(true);
+                          }}
+                          placeholder="Professor name"
+                          className="w-full rounded-full border border-gray-500 bg-transparent px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={schoolQuery}
+                          onFocus={() => setShowMobileSuggestions(true)}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setSchoolQuery(value);
+                            search({ mode: "schools", query: value });
+                            setShowMobileSuggestions(true);
+                          }}
+                          placeholder="School name"
+                          className="w-full rounded-full border border-gray-500 bg-transparent px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
+                        />
+                      </div>
+                    )}
+
+                    {showMobileSuggestions && (
+                      <div className="max-h-56 overflow-auto rounded-lg border border-white/30 bg-white/70 text-black shadow-lg">
+                        {loading ? (
+                          <div className="px-3 py-2 text-sm text-gray-700">
+                            Searching...
+                          </div>
+                        ) : results.length === 0 ? (
+                          <div className="px-3 py-2 text-sm text-gray-700">
+                            {(searchType === "professors"
+                              ? profQuery
+                              : schoolQuery
+                            ).trim().length < 3
+                              ? "Type at least 3 characters"
+                              : count === 0
+                              ? "No matches yet"
+                              : "Searching..."}
+                          </div>
+                        ) : (
+                          results.map((item) => (
+                            <button
+                              key={`mobile-${item.type}-${item.id}`}
+                              type="button"
+                              className="block w-full px-3 py-2 text-left text-sm hover:bg-white/60"
+                              onMouseDown={(e) => e.preventDefault()}
+                              onClick={() =>
+                                handleResultClick(item.id, item.type)
+                              }
+                            >
+                              <div className="font-semibold">{item.name}</div>
+                              {item.subtitle ? (
+                                <div className="text-xs text-gray-600">
+                                  {item.subtitle}
+                                </div>
+                              ) : null}
+                            </button>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           )}
+
+          <div className="relative" ref={mobileMenuRef}>
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="p-2"
+              aria-label="Open menu"
+            >
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            </button>
+
+            {showMobileMenu && (
+              <div className="absolute right-0 top-full z-120 mt-2 w-56 rounded-lg bg-white py-2 text-black shadow-lg">
+                <Link
+                  href="/browse"
+                  className="block w-full text-left px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Browse
+                </Link>
+                {!isLoggedIn ? (
+                  <>
+                    <Link
+                      href="/login"
+                      className="block w-full text-left px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Log In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="block w-full text-left px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/lecturer/add"
+                      className="block w-full text-left px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Add a Lecturer
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/my-ratings"
+                      className="block px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      Your Ratings
+                    </Link>
+
+                    <div className="my-1 border-t border-gray-200" />
+                    <button
+                      onClick={async () => {
+                        await authClient.signOut();
+                        setShowMobileMenu(false);
+                        router.push("/");
+                        router.refresh();
+                      }}
+                      className="block w-full px-4 py-2 text-left text-sm font-medium hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
