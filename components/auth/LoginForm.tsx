@@ -77,6 +77,7 @@ export function LoginForm() {
         router.refresh();
       }, 500);
     } catch (err) {
+      console.log("Login error:", err.message || err);
       setStatus("An unexpected error occurred. Please try again.");
       setSubmitting(false);
     }

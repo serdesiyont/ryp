@@ -13,15 +13,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_AUTH_BASE =
-  // Prefer a server-only variable so the backend URL is not exposed to clients.
-  // Fall back to the public var that is already used in auth-client.ts.
-  (
-    process.env.AUTH_BACKEND_URL ||
-    process.env.APP_URL ||
-    process.env.NEXT_PUBLIC_APP_URL ||
-    ""
-  ).replace(/\/$/, "");
+// AUTH_BACKEND_URL must be the URL of your backend API server, e.g.
+// https://your-backend.railway.app  (NOT the Vercel frontend URL).
+// Set this as a server-only env var in Vercel so it is never exposed to the browser.
+const BACKEND_AUTH_BASE = (process.env.AUTH_BACKEND_URL || "").replace(
+  /\/$/,
+  ""
+);
 
 async function authProxy(request: NextRequest): Promise<NextResponse> {
   if (!BACKEND_AUTH_BASE) {
@@ -43,6 +41,12 @@ async function authProxy(request: NextRequest): Promise<NextResponse> {
   forwardedHeaders.delete("host");
   forwardedHeaders.delete("connection");
   forwardedHeaders.delete("transfer-encoding");
+  // Tell the backend NOT to compress its response. Node's fetch() automatically
+  // decompresses bodies, so if we forwarded accept-encoding the backend would
+  // send gzip, Node would silently decompress it, but we'd still forward the
+  // Content-Encoding: gzip header → browser gets plain JSON but tries to
+  // decompress it → ERR_CONTENT_DECODING_FAILED.
+  forwardedHeaders.set("accept-encoding", "identity");
 
   const init: RequestInit = {
     method: request.method,
@@ -78,6 +82,10 @@ async function authProxy(request: NextRequest): Promise<NextResponse> {
     if (lower === "connection" || lower === "transfer-encoding") return;
     // Set-Cookie is handled separately below
     if (lower === "set-cookie") return;
+    // Node's fetch() decompresses the body automatically, so forwarding
+    // content-encoding would tell the browser to decompress already-plain text
+    // → ERR_CONTENT_DECODING_FAILED. Drop it and content-length (now stale).
+    if (lower === "content-encoding" || lower === "content-length") return;
     response.headers.set(key, value);
   });
 
