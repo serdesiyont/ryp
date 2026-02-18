@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Loader2, Mail } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { authClient, getAuthCallbackURL } from "@/lib/auth-client";
 
 import {
   AuthDivider,
@@ -87,7 +87,7 @@ export function LoginForm() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "http://localhost:4000/",
+        callbackURL: getAuthCallbackURL(),
       });
     } catch (err) {
       setStatus("Failed to sign in with Google. Please try again.");
