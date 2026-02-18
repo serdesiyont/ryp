@@ -18,8 +18,8 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
   const { session } = useAuth();
   const fullName = session?.user?.name || "";
   const userName = fullName.split(" ")[0] || "User";
-  const userInitial = userName.charAt(0).toUpperCase();
   const isLoggedIn = !!session;
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchType, setSearchType] = useState<"professors" | "schools">(
     "professors"
@@ -30,39 +30,34 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
   const [showMobileSuggestions, setShowMobileSuggestions] = useState(false);
   const [profQuery, setProfQuery] = useState("");
   const [schoolQuery, setSchoolQuery] = useState("");
+
   const { results, count, loading, search } = useSearch();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileSearchRef = useRef<HTMLDivElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const refs = [
+      { ref: dropdownRef, close: () => setShowDropdown(false) },
+      { ref: mobileMenuRef, close: () => setShowMobileMenu(false) },
+      { ref: suggestionsRef, close: () => setShowSuggestions(false) },
+      {
+        ref: mobileSearchRef,
+        close: () => {
+          setShowMobileSearch(false);
+          setShowMobileSuggestions(false);
+        },
+      },
+    ];
+
     function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowMobileMenu(false);
-      }
-      if (
-        mobileSearchRef.current &&
-        !mobileSearchRef.current.contains(event.target as Node)
-      ) {
-        setShowMobileSearch(false);
-        setShowMobileSuggestions(false);
-      }
-      if (
-        suggestionsRef.current &&
-        !suggestionsRef.current.contains(event.target as Node)
-      ) {
-        setShowSuggestions(false);
-      }
+      refs.forEach(({ ref, close }) => {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
+          close();
+        }
+      });
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -71,64 +66,113 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
 
   const handleSearchTypeChange = (value: "professors" | "schools") => {
     setSearchType(value);
-    if (value === "professors") {
-      search({ mode: "professors", query: profQuery });
-    } else {
-      search({ mode: "schools", query: schoolQuery });
-    }
+    search({
+      mode: value,
+      query: value === "professors" ? profQuery : schoolQuery,
+    });
+  };
+
+  const handleQueryChange = (value: string, isMobile = false) => {
+    if (searchType === "professors") setProfQuery(value);
+    else setSchoolQuery(value);
+
+    search({ mode: searchType, query: value });
+
+    if (isMobile) setShowMobileSuggestions(true);
+    else setShowSuggestions(true);
   };
 
   const handleResultClick = (id: string, type: "professors" | "schools") => {
     setShowSuggestions(false);
     setShowMobileSuggestions(false);
     setShowMobileSearch(false);
-    if (type === "professors") {
-      router.push(`/professor/${id}`);
-    } else {
-      router.push(`/school/${id}`);
-    }
+    router.push(`/${type === "professors" ? "professor" : "school"}/${id}`);
   };
 
-  const renderSuggestions = (anchorClasses = "w-full", queryText = "") => {
-    return showSuggestions ? (
-      <div
-        className={`absolute top-full mt-2 max-h-64 overflow-auto rounded-lg border border-white/30 bg-white/60 text-black shadow-lg backdrop-blur-md z-50 ${anchorClasses}`}
-      >
-        {loading ? (
-          <div className="px-3 py-2 text-sm text-gray-700">Searching...</div>
-        ) : results.length === 0 ? (
-          <div className="px-3 py-2 text-sm text-gray-700">
-            {queryText.trim().length < 3
-              ? "Type at least 3 characters"
-              : count === 0
-              ? "No matches yet"
-              : "Searching..."}
-          </div>
-        ) : (
-          results.map((item) => (
-            <button
-              key={`${item.type}-${item.id}`}
-              type="button"
-              className="block w-full px-3 py-2 text-left text-sm hover:bg-white/60"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => handleResultClick(item.id, item.type)}
-            >
-              <div className="font-semibold">{item.name}</div>
-              {item.subtitle ? (
-                <div className="text-xs text-gray-600">{item.subtitle}</div>
-              ) : null}
-            </button>
-          ))
-        )}
-      </div>
-    ) : null;
+  const handleLogout = async () => {
+    await authClient.signOut();
+    setShowDropdown(false);
+    setShowMobileMenu(false);
+    router.push("/");
+    router.refresh();
   };
+
+  // Reusable inner content for suggestions (Mobile & Desktop)
+  const renderSuggestionsContent = (queryText: string, prefixKey: string) => {
+    if (loading)
+      return (
+        <div className="px-3 py-2 text-sm text-gray-700">Searching...</div>
+      );
+    if (results.length === 0) {
+      const msg =
+        queryText.trim().length < 3
+          ? "Type at least 3 characters"
+          : count === 0
+          ? "No matches yet"
+          : "Searching...";
+      return <div className="px-3 py-2 text-sm text-gray-700">{msg}</div>;
+    }
+    return results.map((item) => (
+      <button
+        key={`${prefixKey}-${item.type}-${item.id}`}
+        type="button"
+        className="block w-full px-3 py-2 text-left text-sm hover:bg-white/60"
+        onMouseDown={(e) => e.preventDefault()}
+        onClick={() => handleResultClick(item.id, item.type)}
+      >
+        <div className="font-semibold">{item.name}</div>
+        {item.subtitle && (
+          <div className="text-xs text-gray-600">{item.subtitle}</div>
+        )}
+      </button>
+    ));
+  };
+
+  // Shared User Dropdown for Desktop
+  const renderUserDropdown = () => (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setShowDropdown(!showDropdown)}
+        className="text-sm font-semibold hover:text-gray-300 flex items-center gap-2"
+      >
+        Hey, {userName}
+        <span className="text-xs">▼</span>
+      </button>
+
+      {showDropdown && (
+        <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
+          <Link
+            href="/profile"
+            className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
+            onClick={() => setShowDropdown(false)}
+          >
+            Profile
+          </Link>
+          <Link
+            href="/my-ratings"
+            className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
+            onClick={() => setShowDropdown(false)}
+          >
+            Your Ratings
+          </Link>
+          <div className="border-t border-gray-200 my-1" />
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  const activeQuery = searchType === "professors" ? profQuery : schoolQuery;
 
   return (
     <header className="relative z-100 bg-black text-white flex items-center justify-between px-4 lg:px-6 xl:px-12 py-3">
-      {/* Mobile Layout */}
+      {/* --- Mobile Layout --- */}
       <div className="lg:hidden flex items-center justify-between w-full">
-        {/* Mobile Logo */}
         <Link
           href="/"
           className="text-xl font-bold bg-white text-black px-3 py-1 rounded"
@@ -136,7 +180,6 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
           RYP
         </Link>
 
-        {/* Mobile Menu Icon */}
         <div className="flex items-center gap-1">
           {!isHomepage && (
             <div className="relative" ref={mobileSearchRef}>
@@ -173,77 +216,26 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
                       </span>
                     </div>
 
-                    {searchType === "professors" ? (
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={profQuery}
-                          onFocus={() => setShowMobileSuggestions(true)}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setProfQuery(value);
-                            search({ mode: "professors", query: value });
-                            setShowMobileSuggestions(true);
-                          }}
-                          placeholder="Professor name"
-                          className="w-full rounded-full border border-gray-500 bg-transparent px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
-                        />
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={schoolQuery}
-                          onFocus={() => setShowMobileSuggestions(true)}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            setSchoolQuery(value);
-                            search({ mode: "schools", query: value });
-                            setShowMobileSuggestions(true);
-                          }}
-                          placeholder="School name"
-                          className="w-full rounded-full border border-gray-500 bg-transparent px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
-                        />
-                      </div>
-                    )}
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={activeQuery}
+                        onFocus={() => setShowMobileSuggestions(true)}
+                        onChange={(e) =>
+                          handleQueryChange(e.target.value, true)
+                        }
+                        placeholder={
+                          searchType === "professors"
+                            ? "Professor name"
+                            : "School name"
+                        }
+                        className="w-full rounded-full border border-gray-500 bg-transparent px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
+                      />
+                    </div>
 
                     {showMobileSuggestions && (
                       <div className="max-h-56 overflow-auto rounded-lg border border-white/30 bg-white/70 text-black shadow-lg">
-                        {loading ? (
-                          <div className="px-3 py-2 text-sm text-gray-700">
-                            Searching...
-                          </div>
-                        ) : results.length === 0 ? (
-                          <div className="px-3 py-2 text-sm text-gray-700">
-                            {(searchType === "professors"
-                              ? profQuery
-                              : schoolQuery
-                            ).trim().length < 3
-                              ? "Type at least 3 characters"
-                              : count === 0
-                              ? "No matches yet"
-                              : "Searching..."}
-                          </div>
-                        ) : (
-                          results.map((item) => (
-                            <button
-                              key={`mobile-${item.type}-${item.id}`}
-                              type="button"
-                              className="block w-full px-3 py-2 text-left text-sm hover:bg-white/60"
-                              onMouseDown={(e) => e.preventDefault()}
-                              onClick={() =>
-                                handleResultClick(item.id, item.type)
-                              }
-                            >
-                              <div className="font-semibold">{item.name}</div>
-                              {item.subtitle ? (
-                                <div className="text-xs text-gray-600">
-                                  {item.subtitle}
-                                </div>
-                              ) : null}
-                            </button>
-                          ))
-                        )}
+                        {renderSuggestionsContent(activeQuery, "mobile")}
                       </div>
                     )}
                   </div>
@@ -310,15 +302,9 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
                     >
                       Your Ratings
                     </Link>
-
                     <div className="my-1 border-t border-gray-200" />
                     <button
-                      onClick={async () => {
-                        await authClient.signOut();
-                        setShowMobileMenu(false);
-                        router.push("/");
-                        router.refresh();
-                      }}
+                      onClick={handleLogout}
                       className="block w-full px-4 py-2 text-left text-sm font-medium hover:bg-gray-100"
                     >
                       Logout
@@ -331,9 +317,8 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
         </div>
       </div>
 
-      {/* Desktop Layout */}
+      {/* --- Desktop Layout --- */}
       <div className="hidden lg:flex items-center gap-6 w-full justify-center">
-        {/* Logo */}
         <Link
           href="/"
           className="text-xl font-bold bg-white text-black px-3 py-1 rounded"
@@ -341,10 +326,8 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
           RYP
         </Link>
 
-        {/* Navigation items - only on non-homepage */}
         {!isHomepage && (
           <div className="flex items-center gap-3 mr-40">
-            {/* Professors/Schools dropdown */}
             <div className="relative">
               <select
                 value={searchType}
@@ -367,219 +350,88 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
               </span>
             </div>
 
-            {/* Search input */}
             <div className="relative w-130" ref={suggestionsRef}>
-              {searchType === "professors" ? (
-                <input
-                  type="text"
-                  value={profQuery}
-                  onFocus={() => setShowSuggestions(true)}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setProfQuery(value);
-                    search({ mode: "professors", query: value });
-                  }}
-                  placeholder="Professor name"
-                  className="w-130 bg-transparent border border-gray-500 rounded-full px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
-                />
-              ) : (
-                <input
-                  type="text"
-                  value={schoolQuery}
-                  onFocus={() => setShowSuggestions(true)}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setSchoolQuery(value);
-                    search({ mode: "schools", query: value });
-                  }}
-                  placeholder="School name"
-                  className="w-130 bg-transparent border border-gray-500 rounded-full px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
-                />
-              )}
-              {renderSuggestions(
-                "left-1/2 -translate-x-1/2 w-130 max-w-[90vw]",
-                searchType === "professors" ? profQuery : schoolQuery
+              <input
+                type="text"
+                value={activeQuery}
+                onFocus={() => setShowSuggestions(true)}
+                onChange={(e) => handleQueryChange(e.target.value, false)}
+                placeholder={
+                  searchType === "professors" ? "Professor name" : "School name"
+                }
+                className="w-130 bg-transparent border border-gray-500 rounded-full px-4 py-2 text-sm placeholder-gray-400 focus:outline-none focus:border-white"
+              />
+              {showSuggestions && (
+                <div className="absolute top-full mt-2 max-h-64 overflow-auto rounded-lg border border-white/30 bg-white/60 text-black shadow-lg backdrop-blur-md z-50 left-1/2 -translate-x-1/2 w-130 max-w-[90vw]">
+                  {renderSuggestionsContent(activeQuery, "desktop")}
+                </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Right side items */}
-        {isHomepage ? (
-          <div className="flex ml-180 items-center gap-3">
-            {!isLoggedIn ? (
-              <>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  <Link href="/browse">Browse</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  <Link href="/login">Log In</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-transparent rounded-full px-8 text-white border-white hover:bg-black hover:text-white hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  <Link href="/browse">Browse</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
-                >
-                  <Link href="/lecturer/add">Add a Lecturer</Link>
-                </Button>
-
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setShowDropdown(!showDropdown)}
-                    className="text-sm font-semibold hover:text-gray-300 flex items-center gap-2"
-                  >
-                    Hey, {userName}
-                    <span className="text-xs">▼</span>
-                  </button>
-
-                  {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        href="/my-ratings"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        Your Ratings
-                      </Link>
-                      <div className="border-t border-gray-200 my-1" />
-                      <button
-                        onClick={async () => {
-                          await authClient.signOut();
-                          setShowDropdown(false);
-                          router.push("/");
-                          router.refresh();
-                        }}
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="flex items-center gap-3">
-            {!isLoggedIn ? (
-              <>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
-                >
-                  <Link href="/browse">Browse</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="ghost"
-                  className="text-white hover:text-black text-sm font-medium rounded-full px-6"
-                >
-                  <Link href="/login">Log In</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
-                >
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
-              </>
-            ) : (
-              <div className="flex items-center gap-3">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
-                >
-                  <Link href="/browse">Browse</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
-                >
-                  <Link href="/lecturer/add">Add a Lecturer</Link>
-                </Button>
-
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setShowDropdown(!showDropdown)}
-                    className="text-sm font-semibold hover:text-gray-300 flex items-center gap-2"
-                  >
-                    Hey, {userName}
-                    <span className="text-xs">▼</span>
-                  </button>
-
-                  {showDropdown && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
-                      <Link
-                        href="/profile"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        Profile
-                      </Link>
-
-                      <Link
-                        href="/my-ratings"
-                        className="block px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                        onClick={() => setShowDropdown(false)}
-                      >
-                        Your Ratings
-                      </Link>
-
-                      <div className="border-t border-gray-200 my-1" />
-                      <button
-                        onClick={async () => {
-                          await authClient.signOut();
-                          setShowDropdown(false);
-                          router.push("/");
-                          router.refresh();
-                        }}
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-medium"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Right Side Nav */}
+        <div
+          className={`flex items-center gap-3 ${isHomepage ? "ml-180" : ""}`}
+        >
+          {!isLoggedIn ? (
+            <>
+              <Button
+                asChild
+                variant="ghost"
+                className={
+                  "text-white hover:text-black text-sm font-medium rounded-full px-6"
+                }
+              >
+                <Link href="/browse">Browse</Link>
+              </Button>
+              <Button
+                asChild
+                variant="ghost"
+                className={
+                  "text-white hover:text-black text-sm font-medium rounded-full px-6"
+                }
+              >
+                <Link href="/signup">Sign Up</Link>
+              </Button>
+              <Button
+                asChild
+                variant={"ghost"}
+                className={
+                  "text-white hover:text-black text-sm font-medium rounded-full px-6"
+                }
+              >
+                <Link href="/login">Log In</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                asChild
+                variant="outline"
+                className={
+                  isHomepage
+                    ? "bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
+                    : "bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
+                }
+              >
+                <Link href="/browse">Browse</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className={
+                  isHomepage
+                    ? "bg-transparent rounded-full px-8 text-white border-white hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 text-sm"
+                    : "bg-white text-black border-white hover:bg-black hover:text-white text-sm font-medium rounded-full px-6"
+                }
+              >
+                <Link href="/lecturer/add">Add a Lecturer</Link>
+              </Button>
+              {renderUserDropdown()}
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
