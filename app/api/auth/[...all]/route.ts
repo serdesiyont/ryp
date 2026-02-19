@@ -14,8 +14,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // AUTH_BACKEND_URL must be the URL of your backend API server, e.g.
-// https://your-backend.railway.app  (NOT the Vercel frontend URL).
-// Set this as a server-only env var in Vercel so it is never exposed to the browser.
 const BACKEND_AUTH_BASE = (process.env.AUTH_BACKEND_URL || "").replace(
   /\/$/,
   ""
