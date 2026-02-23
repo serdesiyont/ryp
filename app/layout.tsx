@@ -16,9 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Rate My Professors",
   description: "Find and rate professors at your university",
-  keywords: [
-    "rate my professors",
-    "rate your professor",],
+  keywords: ["rate my professors", "rate your professor"],
   alternates: {
     canonical: "/",
   },
