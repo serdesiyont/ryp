@@ -9,10 +9,26 @@ import "./globals.css";
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://rate-your-professor.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Rate My Professors",
   description: "Find and rate professors at your university",
-  generator: "v0.app",
+  keywords: [
+    "rate my professors",
+    "rate your professor",],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    url: "/",
+    siteName: "Rate My Professors",
+    title: "Rate My Professors",
+    description: "Find and rate professors at your university",
+    type: "website",
+  },
   icons: {
     icon: [
       {
