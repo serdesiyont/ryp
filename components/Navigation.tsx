@@ -170,7 +170,7 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
   const activeQuery = searchType === "professors" ? profQuery : schoolQuery;
 
   return (
-    <header className="relative z-100 bg-black text-white flex items-center justify-between px-4 lg:px-6 xl:px-12 py-3">
+    <header className="sticky top-0 z-100 bg-black text-white flex items-center justify-between px-4 lg:px-6 xl:px-12 py-3">
       {/* --- Mobile Layout --- */}
       <div className="lg:hidden flex items-center justify-between w-full">
         <Link

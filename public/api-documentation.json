@@ -996,6 +996,75 @@
           }
         }
       ]
+    },
+    "stats": {
+      "basePath": "/stats",
+      "endpoints": [
+        {
+          "path": "/stats",
+          "method": "GET",
+          "description": "Get platform statistics including counts, top campuses, and latest lecturer reviews",
+          "authentication": false,
+          "queryParams": {
+            "page": "number (optional, default: 1, pagination page for latest lecturer reviews)"
+          },
+          "response": {
+            "200": {
+              "message": "Stats retrieved successfully",
+              "data": {
+                "campusCount": "number (total number of campuses)",
+                "lecturerCount": "number (total number of lecturers)",
+                "totalReviews": "number (combined count of campus ratings and lecturer ratings)",
+                "topRatedCampuses": [
+                  {
+                    "_id": "string",
+                    "name": "string",
+                    "address": "string",
+                    "description": "string",
+                    "overallRating": "number",
+                    "count": "number"
+                  }
+                ],
+                "latestLecturerReviews": {
+                  "data": [
+                    {
+                      "_id": "string",
+                      "lecturerId": {
+                        "_id": "string",
+                        "name": "string",
+                        "university": "string",
+                        "department": "string"
+                      },
+                      "userId": "string",
+                      "course": "string",
+                      "difficulty": "number",
+                      "wouldTakeAgain": "boolean",
+                      "quality": "number",
+                      "creditHr": "number",
+                      "grade": "string",
+                      "textbook": "boolean",
+                      "comment": "string",
+                      "tags": ["string"],
+                      "createdAt": "string (ISO date)",
+                      "updatedAt": "string (ISO date)"
+                    }
+                  ],
+                  "pagination": {
+                    "page": "number",
+                    "limit": "number (fixed at 3)",
+                    "total": "number",
+                    "totalPages": "number"
+                  }
+                }
+              }
+            },
+            "500": {
+              "message": "Error retrieving stats",
+              "error": "string"
+            }
+          }
+        }
+      ]
     }
   },
   "notes": {

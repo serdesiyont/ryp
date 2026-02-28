@@ -23,7 +23,10 @@ export default function HeroSection() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     }
@@ -67,7 +70,9 @@ export default function HeroSection() {
     }
 
     if (loading) {
-      return <div className="px-3 py-2 text-sm text-gray-700">Searching...</div>;
+      return (
+        <div className="px-3 py-2 text-sm text-gray-700">Searching...</div>
+      );
     }
 
     if (activeQuery.trim().length < 3) {
@@ -75,7 +80,9 @@ export default function HeroSection() {
     }
 
     if (results.length === 0) {
-      return <div className="px-3 py-2 text-sm text-gray-700">No matches yet</div>;
+      return (
+        <div className="px-3 py-2 text-sm text-gray-700">No matches yet</div>
+      );
     }
 
     return results.map((item) => (
@@ -116,7 +123,9 @@ export default function HeroSection() {
               <span
                 aria-hidden="true"
                 className={`absolute bottom-1 left-1 top-1 w-[calc(50%-0.25rem)] rounded-full bg-black transition-transform duration-300 ease-out ${
-                  searchType === "schools" ? "translate-x-full" : "translate-x-0"
+                  searchType === "schools"
+                    ? "translate-x-full"
+                    : "translate-x-0"
                 }`}
               />
               <button
@@ -175,12 +184,17 @@ export default function HeroSection() {
             </div>
           </form>
 
-          {showSuggestions && (loading || !!error || activeQuery.trim().length >= 3) ? (
+          {showSuggestions &&
+          (loading || !!error || activeQuery.trim().length >= 3) ? (
             <div className="absolute left-0 right-0 z-20 mt-2 max-h-72 overflow-auto rounded-2xl border border-black/10 bg-white/95 text-left shadow-lg backdrop-blur-sm">
               {renderSuggestions()}
-              {results.length > 0 && !loading && activeQuery.trim().length >= 3 ? (
+              {results.length > 0 &&
+              !loading &&
+              activeQuery.trim().length >= 3 ? (
                 <div className="border-t border-neutral-200 px-3 py-2 text-xs text-neutral-500">
-                  {typeof count === "number" ? `${count} result(s)` : `${results.length} result(s)`}
+                  {typeof count === "number"
+                    ? `${count} result(s)`
+                    : `${results.length} result(s)`}
                 </div>
               ) : null}
             </div>

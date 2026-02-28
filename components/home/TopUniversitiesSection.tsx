@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { topUniversities } from "@/components/home/data";
+import type { TopRatedCampus } from "@/lib/api/stats";
 
-export default function TopUniversitiesSection() {
+interface TopUniversitiesSectionProps {
+  campuses: TopRatedCampus[];
+}
+
+export default function TopUniversitiesSection({
+  campuses,
+}: TopUniversitiesSectionProps) {
   return (
     <section className="bg-white px-6 py-24">
       <div className="mx-auto max-w-7xl">
@@ -20,32 +26,40 @@ export default function TopUniversitiesSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {topUniversities.map((university) => (
-            <article
-              key={university.name}
-              className="rounded-sm border border-black/5 p-6 transition-all hover:scale-105 hover:border-black hover:bg-neutral-100"
-            >
-              <div className="mb-6 flex aspect-square items-center justify-center bg-neutral-200 text-5xl">
-                🎓
-              </div>
-              <h3 className="mb-2 text-xl font-bold">{university.name}</h3>
-              <div className="mb-4 flex items-center gap-2">
-                <span>★</span>
-                <span className="text-sm font-bold">{university.rating}</span>
-                <span className="text-xs text-neutral-400">
-                  ({university.reviews})
-                </span>
-              </div>
-              <Link
-                href="/browse"
-                className="text-xs font-black uppercase tracking-widest underline"
+        {campuses.length === 0 ? (
+          <p className="text-center text-neutral-400">
+            No universities rated yet. Be the first to rate!
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {campuses.map((campus) => (
+              <article
+                key={campus._id}
+                className="rounded-sm border border-black/5 p-6 transition-all hover:scale-105 hover:border-black hover:bg-neutral-100"
               >
-                View Profile
-              </Link>
-            </article>
-          ))}
-        </div>
+                <div className="mb-6 flex aspect-square items-center justify-center bg-neutral-200 text-5xl">
+                  🎓
+                </div>
+                <h3 className="mb-2 text-xl font-bold">{campus.name}</h3>
+                <div className="mb-4 flex items-center gap-2">
+                  <span>★</span>
+                  <span className="text-sm font-bold">
+                    {campus.overallRating.toFixed(1)}
+                  </span>
+                  <span className="text-xs text-neutral-400">
+                    ({campus.count} {campus.count === 1 ? "review" : "reviews"})
+                  </span>
+                </div>
+                <Link
+                  href={`/school/${campus._id}`}
+                  className="text-xs font-black uppercase tracking-widest underline"
+                >
+                  View Profile
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

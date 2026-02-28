@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth/auth-provider";
 
-export default function CtaSection({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function CtaSection() {
+  const { session } = useAuth();
+  const isLoggedIn = !!session;
   return (
     <section className="relative overflow-hidden bg-black px-6 py-24 text-white">
       <div className="relative z-10 mx-auto max-w-4xl text-center">

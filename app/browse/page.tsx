@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import { fetchProfessors } from "@/lib/api/professors";
 import { fetchSchools } from "@/lib/api/schools";
+
+type BrowseTab = "professors" | "schools";
 
 const ratingColor = (value: number) => {
   if (value < 1) return "bg-red-600 text-white";
@@ -15,9 +18,10 @@ const ratingColor = (value: number) => {
 };
 
 export default function BrowsePage() {
-  const [activeTab, setActiveTab] = useState<"professors" | "schools">(
-    "professors"
-  );
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const activeTab: BrowseTab = tabParam === "schools" ? "schools" : "professors";
+
   const [professors, setProfessors] = useState<
     Awaited<ReturnType<typeof fetchProfessors>>
   >([]);
@@ -66,8 +70,8 @@ export default function BrowsePage() {
 
         {/* Tabs */}
         <div className="flex gap-4 mb-8 border-b">
-          <button
-            onClick={() => setActiveTab("professors")}
+          <Link
+            href="/browse?tab=professors"
             className={`px-4 py-2 font-semibold border-b-2 ${
               activeTab === "professors"
                 ? "border-blue-600 text-blue-600"
@@ -75,9 +79,9 @@ export default function BrowsePage() {
             }`}
           >
             Professors ({professors.length})
-          </button>
-          <button
-            onClick={() => setActiveTab("schools")}
+          </Link>
+          <Link
+            href="/browse?tab=schools"
             className={`px-4 py-2 font-semibold border-b-2 ${
               activeTab === "schools"
                 ? "border-blue-600 text-blue-600"
@@ -85,7 +89,7 @@ export default function BrowsePage() {
             }`}
           >
             Schools ({schools.length})
-          </button>
+          </Link>
         </div>
 
         {loading && <div className="text-sm text-gray-600">Loading data…</div>}
@@ -128,7 +132,9 @@ export default function BrowsePage() {
                 <div className="flex justify-between text-xs text-gray-500">
                   <span>{prof.totalRatings} ratings</span>
                   <span>
-                    {prof.wouldTakeAgain.toFixed(0)}% would take again
+                    {prof.wouldTakeAgain != null
+                      ? `${prof.wouldTakeAgain.toFixed(0)}% would take again`
+                      : "N/A would take again"}
                   </span>
                 </div>
               </Link>
