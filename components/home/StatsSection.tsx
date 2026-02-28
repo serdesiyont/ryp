@@ -10,16 +10,17 @@ interface StatsSectionProps {
  */
 function ceilToNice(n: number): number {
   if (n <= 0) return 0;
-  if (n <= 10) return Math.ceil(n / 5) * 5;           // step 5   → 5, 10
-  if (n <= 100) return Math.ceil(n / 5) * 5;          // step 5   → 15, 20…
-  if (n <= 1000) return Math.ceil(n / 10) * 10;       // step 10  → 130, 990…
-  if (n <= 10000) return Math.ceil(n / 100) * 100;    // step 100 → 1200…
-  return Math.ceil(n / 1000) * 1000;                  // step 1k
+  if (n <= 10) return Math.ceil(n / 5) * 5; // step 5   → 5, 10
+  if (n <= 100) return Math.ceil(n / 5) * 5; // step 5   → 15, 20…
+  if (n <= 1000) return Math.ceil(n / 10) * 10; // step 10  → 130, 990…
+  if (n <= 10000) return Math.ceil(n / 100) * 100; // step 100 → 1200…
+  return Math.ceil(n / 1000) * 1000; // step 1k
 }
 
 function formatStat(n: number): string {
   const ceiled = ceilToNice(n);
-  if (ceiled >= 1000) return `${(ceiled / 1000).toFixed(ceiled % 1000 === 0 ? 0 : 1)}k+`;
+  if (ceiled >= 1000)
+    return `${(ceiled / 1000).toFixed(ceiled % 1000 === 0 ? 0 : 1)}k+`;
   return `${ceiled}+`;
 }
 

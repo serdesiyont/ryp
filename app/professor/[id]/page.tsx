@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import RatingChart from "@/components/RatingChart";
 import ReviewCard from "@/components/ReviewCard";
 import {
@@ -71,7 +72,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
     .map(([tag]) => tag);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
@@ -210,6 +211,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

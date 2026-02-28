@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 type ProfessorRating = {
   id: number;
@@ -180,7 +181,7 @@ export default function MyRatingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
       <main className="max-w-4xl mx-auto px-4 py-8">
@@ -260,6 +261,7 @@ export default function MyRatingsPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

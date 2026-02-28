@@ -5,6 +5,7 @@ import { use, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import {
   fetchSchoolById,
@@ -195,7 +196,7 @@ export default function SchoolRatingDetail({
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
       <main className="max-w-3xl mx-auto px-4 py-8">
@@ -574,6 +575,7 @@ export default function SchoolRatingDetail({
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

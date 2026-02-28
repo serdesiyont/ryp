@@ -19,9 +19,7 @@ export default function HomeTemplate({ stats }: HomeTemplateProps) {
         lecturerCount={stats?.lecturerCount ?? 0}
         totalReviews={stats?.totalReviews ?? 0}
       />
-      <TopUniversitiesSection
-        campuses={stats?.topRatedCampuses ?? []}
-      />
+      <TopUniversitiesSection campuses={stats?.topRatedCampuses ?? []} />
       <LatestReviewsSection
         reviews={stats?.latestLecturerReviews?.data ?? []}
       />

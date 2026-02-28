@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { fetchProfessors } from "@/lib/api/professors";
 import { fetchSchools } from "@/lib/api/schools";
 
@@ -62,7 +63,7 @@ export default function BrowsePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
@@ -173,6 +174,7 @@ export default function BrowsePage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

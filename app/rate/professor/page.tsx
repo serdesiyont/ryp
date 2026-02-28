@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { fetchProfessors } from "@/lib/api/professors";
 
 const ratingColor = (value: number) => {
@@ -24,7 +25,7 @@ export default async function ProfessorRatingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
 
       <main className="max-w-5xl mx-auto px-4 py-8">
@@ -65,6 +66,7 @@ export default async function ProfessorRatingPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 }
