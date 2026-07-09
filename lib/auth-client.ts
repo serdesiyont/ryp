@@ -1,8 +1,9 @@
 import { createAuthClient } from "better-auth/react";
 
-// No baseURL needed – all auth requests are proxied through /api/auth on this
-// origin (app/api/auth/[...all]/route.ts). This means the browser always makes
-// same-origin requests and SameSite cookie restrictions never block the cookie.
+// No baseURL needed – Better Auth runs natively in this app and handles all
+// /api/auth/* requests (app/api/auth/[...all]/route.ts). The browser always
+// makes same-origin requests, so SameSite cookie restrictions never block the
+// session cookie.
 export const authClient = createAuthClient();
 
 export function getAuthCallbackURL() {

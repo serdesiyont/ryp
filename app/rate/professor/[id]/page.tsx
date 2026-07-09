@@ -4,6 +4,7 @@ import { use, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { RatingScale } from "@/components/RatingScale";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -38,13 +39,46 @@ const TAGS = [
   "Online Savvy",
 ];
 
-const ratingColor = (value: number) => {
-  if (value <= 1) return "#dc2626";
-  if (value <= 2) return "#f2994a";
-  if (value <= 3) return "#facc15";
-  if (value <= 4) return "#8ecf6f";
-  return "#16a34a";
-};
+function YesNo({
+  label,
+  value,
+  onChange,
+  required = false,
+}: {
+  label: string;
+  value: "yes" | "no" | null;
+  onChange: (v: "yes" | "no") => void;
+  required?: boolean;
+}) {
+  return (
+    <div>
+      <h3 className="mb-2 text-sm font-semibold">
+        {label} {required && <span className="text-red-500">*</span>}
+      </h3>
+      <div className="flex gap-2">
+        {(["yes", "no"] as const).map((opt) => {
+          const on = value === opt;
+          const active =
+            opt === "yes"
+              ? "border-green-600 bg-green-50 text-green-700"
+              : "border-red-600 bg-red-50 text-red-700";
+          return (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onChange(opt)}
+              className={`flex-1 rounded-lg border py-2 text-sm font-medium capitalize transition ${
+                on ? active : "border-gray-200 text-gray-500 hover:border-gray-300"
+              }`}
+            >
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function ProfessorRatingDetail({
   params,
@@ -276,10 +310,12 @@ export default function ProfessorRatingDetail({
 
       <main className="max-w-3xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-1 text-4xl font-bold">{selectedProf.name}</h1>
-          <p className="mb-3 text-lg text-gray-600">Add Rating</p>
-          <p className="text-sm">
+        <div className="mb-6">
+          <p className="text-sm font-medium uppercase tracking-wide text-gray-900">
+            Add Rating
+          </p>
+          <h1 className="text-3xl font-bold">{selectedProf.name}</h1>
+          <p className="mt-1 text-sm">
             <span className="font-semibold">{selectedProf.department}</span> •
             {selectedProf.schoolId ? (
               <Link
@@ -312,20 +348,25 @@ export default function ProfessorRatingDetail({
         </div>
 
         {/* Select up to 3 tags */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">Select up to 3 tags</h2>
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+          <h2 className="mb-3 text-sm font-semibold">
+            Select up to 3 tags{" "}
+            <span className="font-normal text-gray-400">
+              ({selectedTags.length}/3)
+            </span>
+          </h2>
           <div className="flex flex-wrap gap-2">
             {TAGS.map((tag) => (
               <button
                 key={tag}
                 onClick={() => toggleTag(tag)}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
                   selectedTags.includes(tag)
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 } ${
                   selectedTags.length >= 3 && !selectedTags.includes(tag)
-                    ? "cursor-not-allowed opacity-50"
+                    ? "cursor-not-allowed opacity-40"
                     : ""
                 }`}
                 disabled={
@@ -338,252 +379,122 @@ export default function ProfessorRatingDetail({
           </div>
         </div>
 
-        {/* Select Course Code */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">Course name / code</h2>
-          <div className="mb-3">
+        {/* Course + grade */}
+        <div className="mb-6 grid gap-4 rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:grid-cols-2">
+          <div>
+            <h2 className="mb-2 text-sm font-semibold">
+              Course name / code <span className="text-red-500">*</span>
+            </h2>
             <input
               type="text"
               value={courseCode}
               onChange={(e) => setCourseCode(e.target.value)}
-              placeholder="Start typing course name or code"
-              className="w-full rounded border border-gray-300 px-4 py-2"
+              placeholder="e.g. CS 101"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            />
+            {courseSuggestions.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {courseSuggestions.map((course) => (
+                  <button
+                    key={course}
+                    onClick={() => setCourseCode(course)}
+                    className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-200"
+                  >
+                    {course}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <div>
+            <h2 className="mb-2 text-sm font-semibold">
+              Grade received <span className="text-red-500">*</span>
+            </h2>
+            <select
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
+            >
+              <option value="">Select grade</option>
+              {["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F", "N/A"].map(
+                (g) => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+        </div>
+
+        {/* Ratings — compact grid */}
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+            <RatingScale
+              label="Overall rating"
+              required
+              value={rating}
+              onChange={setRating}
+              lowLabel="Awful"
+              highLabel="Awesome"
+            />
+            <RatingScale
+              label="Difficulty"
+              required
+              value={difficulty}
+              onChange={setDifficulty}
+              lowLabel="Easy"
+              highLabel="Hard"
+            />
+            <RatingScale
+              label="Credit hours"
+              required
+              value={creditHr}
+              onChange={setCreditHr}
+              lowLabel="Low"
+              highLabel="High"
             />
           </div>
-          {courseSuggestions.length > 0 && (
-            <div className="mb-4 rounded border border-gray-200 bg-gray-50 p-2 text-sm">
-              {courseSuggestions.map((course) => (
-                <button
-                  key={course}
-                  onClick={() => setCourseCode(course)}
-                  className="block w-full rounded px-3 py-2 text-left hover:bg-white"
-                >
-                  {course}
-                </button>
-              ))}
-            </div>
-          )}
-          <label className="flex cursor-pointer items-center gap-3">
-            <span className="text-sm">Fill course name if not listed</span>
-          </label>
         </div>
 
-        {/* Rate your professor */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">
-            Rate your professor <span className="text-red-500">*</span>
-          </h2>
-          <div className="mb-4 flex justify-center gap-2">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <button
-                key={value}
-                onClick={() => setRating(value)}
-                style={{
-                  backgroundColor:
-                    value <= rating && rating > 0
-                      ? ratingColor(rating)
-                      : "#e5e7eb",
-                }}
-                className="h-12 w-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* How difficult */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">
-            How difficult was this professor?{" "}
-            <span className="text-red-500">*</span>
-          </h2>
-          <div className="mb-4 flex justify-center gap-2">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <button
-                key={value}
-                onClick={() => setDifficulty(value)}
-                style={{
-                  backgroundColor:
-                    value <= difficulty && difficulty > 0
-                      ? ratingColor(difficulty)
-                      : "#e5e7eb",
-                }}
-                className="h-12 w-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Very Easy</span>
-            <span>5 - Very Difficult</span>
-          </div>
-        </div>
-
-        {/* Credit hours */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">
-            Credit hours <span className="text-red-500">*</span>
-          </h2>
-          <div className="mb-4 flex justify-center gap-2">
-            {[1, 2, 3, 4, 5].map((value) => (
-              <button
-                key={value}
-                onClick={() => setCreditHr(value)}
-                style={{
-                  backgroundColor:
-                    value <= creditHr && creditHr > 0
-                      ? ratingColor(creditHr)
-                      : "#e5e7eb",
-                }}
-                className="h-12 w-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Low</span>
-            <span>5 - High</span>
-          </div>
-        </div>
-
-        {/* Would you take again */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">
-            Would you take this professor again?{" "}
-            <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-6">
-            <button
-              onClick={() => setRetake("yes")}
-              className={`h-16 w-16 rounded-full border-4 transition ${
-                retake === "yes"
-                  ? "border-green-600 bg-green-100"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
-            />
-            <button
-              onClick={() => setRetake("no")}
-              className={`h-16 w-16 rounded-full border-4 transition ${
-                retake === "no"
-                  ? "border-red-600 bg-red-100"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
-            />
-          </div>
-          <div className="mt-2 flex justify-center gap-32 text-sm">
-            <span>Yes</span>
-            <span>No</span>
-          </div>
-        </div>
-
-        {/* Did this professor use textbooks */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">
-            Did this professor use textbooks?
-          </h2>
-          <div className="flex justify-center gap-6">
-            <button
-              onClick={() => setTextbook("yes")}
-              className={`h-16 w-16 rounded-full border-4 transition ${
-                textbook === "yes"
-                  ? "border-green-600 bg-green-100"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
-            />
-            <button
-              onClick={() => setTextbook("no")}
-              className={`h-16 w-16 rounded-full border-4 transition ${
-                textbook === "no"
-                  ? "border-red-600 bg-red-100"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
-            />
-          </div>
-          <div className="mt-2 flex justify-center gap-32 text-sm">
-            <span>Yes</span>
-            <span>No</span>
-          </div>
-        </div>
-
-        {/* Select grade received */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-4 font-semibold">Select grade received</h2>
-          <select
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
-            className="w-full rounded border border-gray-300 px-4 py-2"
-          >
-            <option value="">Select grade</option>
-            <option value="A">A</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B">B</option>
-            <option value="B-">B-</option>
-            <option value="C+">C+</option>
-            <option value="C">C</option>
-            <option value="C-">C-</option>
-            <option value="D">D</option>
-            <option value="F">F</option>
-            <option value="N/A">N/A</option>
-          </select>
+        {/* Yes / No questions */}
+        <div className="mb-6 grid gap-4 rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:grid-cols-2">
+          <YesNo
+            label="Would take again?"
+            required
+            value={retake}
+            onChange={setRetake}
+          />
+          <YesNo label="Used textbooks?" value={textbook} onChange={setTextbook} />
         </div>
 
         {/* Write a Review */}
-        <div className="mb-6 rounded-lg bg-white p-6">
-          <h2 className="mb-3 font-semibold">
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+          <h2 className="text-sm font-semibold">
             Write a Review <span className="text-red-500">*</span>
           </h2>
-          <p className="mb-4 text-sm text-gray-600">
-            Discuss the professor's professional abilities including teaching
-            style and ability to convey the material clearly
+          <p className="mb-3 text-sm text-gray-500">
+            Cover teaching style and how clearly they convey material.
           </p>
-
-          {/* Guidelines */}
-          <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
-            <div className="flex items-start gap-3">
-              <span className="text-lg font-bold">ℹ</span>
-              <div>
-                <button className="mb-2 text-sm font-semibold hover:underline">
-                  Guidelines
-                </button>
-                <ul className="hidden space-y-1 text-sm text-gray-700">
-                  <li>
-                    • Your rating could be removed if you use profanity or
-                    derogatory terms.
-                  </li>
-                  <li>
-                    • Don't claim that the professor shows bias or favoritism
-                    for or against students.
-                  </li>
-                  <li>• Don't forget to proof read!</li>
-                </ul>
-                <button className="text-sm text-blue-600 hover:underline">
-                  View all guidelines
-                </button>
-              </div>
-            </div>
-          </div>
-
           <textarea
             placeholder="What do you want other students to know about this professor?"
             value={review}
             onChange={(e) => setReview(e.target.value)}
             maxLength={350}
-            rows={8}
+            rows={5}
             required
-            className="w-full resize-none rounded border border-blue-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
           />
-          <div className="mt-1 text-right text-sm text-gray-600">
+          <div className="mt-1 text-right text-xs text-gray-400">
             {review.length}/350
           </div>
         </div>
 
         {/* Terms and Conditions */}
-        <div className="mb-6 rounded-lg bg-white p-6 text-center text-sm">
-          <p className="mb-3">
-            By clicking the "Submit" button, I acknowledge that I have read and
-            agreed to the Rate My Professors{" "}
+        <div className="mb-4 text-center text-xs text-gray-500">
+          <p>
+            By clicking "Submit", I acknowledge that I have read and agreed to
+            the Rate My Professors{" "}
             <Link href="#" className="text-blue-600 hover:underline">
               Site Guidelines
             </Link>
@@ -603,7 +514,7 @@ export default function ProfessorRatingDetail({
         <div className="mb-8 flex justify-center">
           <Button
             onClick={handleSubmit}
-            className="rounded-full bg-gray-500 px-12 py-3 text-white hover:bg-gray-600"
+            className="rounded-full bg-gray-900 px-12 py-3 text-white hover:bg-black"
             disabled={submitting}
           >
             {submitting ? "Submitting..." : "Submit Rating"}

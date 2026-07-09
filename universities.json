@@ -1,0 +1,586 @@
+[
+  {
+    "name": "Addis Ababa University (AAU)",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Arat Kilo"
+    },
+    "description": "Established in 1950, AAU is the pioneer and largest higher education institution in Ethiopia. It is a research-intensive university with a wide array of undergraduate and graduate programs."
+  },
+  {
+    "name": "Haramaya University",
+    "address": {
+      "city": "Haramaya",
+      "region": "Oromia",
+      "zone": "East Hararghe"
+    },
+    "description": "Founded in 1954 as an agricultural college, it is a center of excellence for agriculture and life sciences, located near the historic city of Harar."
+  },
+  {
+    "name": "Jimma University (JU)",
+    "address": { "city": "Jimma", "region": "Oromia", "zone": "Jimma" },
+    "description": "Renowned for its 'Community Based Education' philosophy and its specialized hospital. It is consistently ranked as a top research university in Ethiopia."
+  },
+  {
+    "name": "University of Gondar (UoG)",
+    "address": {
+      "city": "Gondar",
+      "region": "Amhara",
+      "zone": "Central Gondar"
+    },
+    "description": "Hosts the country's oldest medical college. It is a major institution for health sciences, medicine, and social sciences."
+  },
+  {
+    "name": "Mekelle University (MU)",
+    "address": { "city": "Mekelle", "region": "Tigray", "zone": "Mekelle" },
+    "description": "A prominent university in northern Ethiopia known for its Institute of Technology and College of Dryland Agriculture."
+  },
+  {
+    "name": "Hawassa University (HU)",
+    "address": { "city": "Hawassa", "region": "Sidama", "zone": "Hawassa" },
+    "description": "A comprehensive university established in 2000. It is known for its beautiful campus and strong programs in agriculture, forestry, and law."
+  },
+  {
+    "name": "Bahir Dar University (BDU)",
+    "address": { "city": "Bahir Dar", "region": "Amhara", "zone": "Bahir Dar" },
+    "description": "Formed by merging a polytechnic institute and a teachers' college, it is famous for its textile engineering and maritime academy."
+  },
+  {
+    "name": "Arba Minch University (AMU)",
+    "address": {
+      "city": "Arba Minch",
+      "region": "South Ethiopia",
+      "zone": "Gamo"
+    },
+    "description": "Specializes in Water Technology and Hydraulic Engineering, reflecting its origins as a water technology institute."
+  },
+  {
+    "name": "Adama Science and Technology University (ASTU)",
+    "address": { "city": "Adama", "region": "Oromia", "zone": "East Shewa" },
+    "description": "A dedicated center of excellence for applied sciences and engineering, tasked with supporting Ethiopia's industrial development."
+  },
+  {
+    "name": "Addis Ababa Science and Technology University (AASTU)",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Kilinto"
+    },
+    "description": "Focuses on high-tech engineering and innovation, with close links to the Kilinto Industrial Park."
+  },
+  {
+    "name": "Jigjiga University",
+    "address": { "city": "Jigjiga", "region": "Somali", "zone": "Fafan" },
+    "description": "The first and largest university in the Somali region, focusing on pastoral agro-economics and dryland development."
+  },
+  {
+    "name": "Dire Dawa University",
+    "address": {
+      "city": "Dire Dawa",
+      "region": "Dire Dawa",
+      "zone": "Dire Dawa"
+    },
+    "description": "Located in the major trade hub of Dire Dawa, offering diverse programs in technology, business, and law."
+  },
+  {
+    "name": "Wollo University",
+    "address": {
+      "city": "Dessie/Kombolcha",
+      "region": "Amhara",
+      "zone": "South Wollo"
+    },
+    "description": "Operates twin campuses in Dessie and Kombolcha, serving a large population in the north-central highlands."
+  },
+  {
+    "name": "Debre Berhan University",
+    "address": {
+      "city": "Debre Berhan",
+      "region": "Amhara",
+      "zone": "North Shewa"
+    },
+    "description": "Known for its cool climate and agricultural research, particularly in highland crops and livestock."
+  },
+  {
+    "name": "Debre Markos University",
+    "address": {
+      "city": "Debre Markos",
+      "region": "Amhara",
+      "zone": "East Gojjam"
+    },
+    "description": "Serves the Gojjam region with colleges of agriculture, health science, and technology."
+  },
+  {
+    "name": "Wolaita Sodo University",
+    "address": {
+      "city": "Wolaita Sodo",
+      "region": "South Ethiopia",
+      "zone": "Wolaita"
+    },
+    "description": "Located in the densely populated Wolaita zone, focusing on agriculture and public health."
+  },
+  {
+    "name": "Ambo University",
+    "address": { "city": "Ambo", "region": "Oromia", "zone": "West Shewa" },
+    "description": "Historically an agricultural school, now a full university known for applied sciences and its proximity to Addis Ababa."
+  },
+  {
+    "name": "Aksum University",
+    "address": { "city": "Axum", "region": "Tigray", "zone": "Central Tigray" },
+    "description": "Specializes in archaeology, history, and heritage management, leveraging its location in the ancient city of Axum."
+  },
+  {
+    "name": "Maddawalabu University",
+    "address": { "city": "Bale Robe", "region": "Oromia", "zone": "Bale" },
+    "description": "Located near the Bale Mountains, with research interests in biodiversity and highland agriculture."
+  },
+  {
+    "name": "Dilla University",
+    "address": { "city": "Dilla", "region": "South Ethiopia", "zone": "Gedeo" },
+    "description": "Situated in a major coffee-growing region, with a strong history in teacher education."
+  },
+  {
+    "name": "Mizan-Tepi University",
+    "address": {
+      "city": "Mizan Teferi",
+      "region": "South West Ethiopia",
+      "zone": "Bench Sheko"
+    },
+    "description": "Has campuses in Mizan and Tepi, focusing on forestry, spices, and coffee research."
+  },
+  {
+    "name": "Semera University",
+    "address": { "city": "Semera", "region": "Afar", "zone": "Awsi Rasu" },
+    "description": "The only university in the Afar region, focusing on arid land agriculture, geology, and tourism."
+  },
+  {
+    "name": "Wollega University",
+    "address": {
+      "city": "Nekemte",
+      "region": "Oromia",
+      "zone": "East Wollega"
+    },
+    "description": "A large university in western Ethiopia with campuses in Nekemte, Gimbi, and Shambu."
+  },
+  {
+    "name": "Adigrat University",
+    "address": {
+      "city": "Adigrat",
+      "region": "Tigray",
+      "zone": "Eastern Tigray"
+    },
+    "description": "Focuses on engineering and technology to support regional industrialization."
+  },
+  {
+    "name": "Wachemo University",
+    "address": {
+      "city": "Hossana",
+      "region": "South Ethiopia",
+      "zone": "Hadiya"
+    },
+    "description": "Serves the Hadiya zone with programs in medicine, business, and natural sciences."
+  },
+  {
+    "name": "Debre Tabor University",
+    "address": {
+      "city": "Debre Tabor",
+      "region": "Amhara",
+      "zone": "South Gondar"
+    },
+    "description": "Located in the historical town of Debre Tabor, focusing on agriculture and social sciences."
+  },
+  {
+    "name": "Metu University",
+    "address": { "city": "Metu", "region": "Oromia", "zone": "Ilu Ababor" },
+    "description": "Situated in the green western highlands, emphasizing coffee and forest resource management."
+  },
+  {
+    "name": "Wolkite University",
+    "address": {
+      "city": "Wolkite",
+      "region": "South Ethiopia",
+      "zone": "Gurage"
+    },
+    "description": "Known for its beautiful campus and programs tailored to the industrious Gurage community."
+  },
+  {
+    "name": "Arsi University",
+    "address": { "city": "Asella", "region": "Oromia", "zone": "Arsi" },
+    "description": "Strong in sports science (located in the home of Ethiopian runners) and agriculture."
+  },
+  {
+    "name": "Assosa University",
+    "address": {
+      "city": "Assosa",
+      "region": "Benishangul-Gumuz",
+      "zone": "Assosa"
+    },
+    "description": "Focuses on mining engineering, geology, and border trade economics."
+  },
+  {
+    "name": "Gambella University",
+    "address": { "city": "Gambella", "region": "Gambella", "zone": "Gambella" },
+    "description": "Specializes in fisheries, wetland management, and tropical agriculture."
+  },
+  {
+    "name": "Bule Hora University",
+    "address": { "city": "Bule Hora", "region": "Oromia", "zone": "West Guji" },
+    "description": "Focuses on mining geology (gold rich area) and animal science."
+  },
+  {
+    "name": "Woldia University",
+    "address": { "city": "Woldia", "region": "Amhara", "zone": "North Wollo" },
+    "description": "A modern university serving the North Wollo area with diverse academic programs."
+  },
+  {
+    "name": "Jinka University",
+    "address": {
+      "city": "Jinka",
+      "region": "South Ethiopia",
+      "zone": "South Omo"
+    },
+    "description": "Specializes in anthropology, tourism, and pastoral studies due to the diverse Omo Valley cultures."
+  },
+  {
+    "name": "Oda Bultum University",
+    "address": { "city": "Chiro", "region": "Oromia", "zone": "West Hararghe" },
+    "description": "Recently upgraded from a college of agriculture, it retains a strong focus on agricultural sciences."
+  },
+  {
+    "name": "Raya University",
+    "address": {
+      "city": "Maichew",
+      "region": "Tigray",
+      "zone": "Southern Tigray"
+    },
+    "description": "A newer institution focusing on agriculture and technology in the fertile Raya valley."
+  },
+  {
+    "name": "Injibara University",
+    "address": { "city": "Injibara", "region": "Amhara", "zone": "Awi" },
+    "description": "Located in the Awi zone, known for forestry and high-altitude crop research."
+  },
+  {
+    "name": "Werabe University",
+    "address": {
+      "city": "Werabe",
+      "region": "South Ethiopia",
+      "zone": "Silte"
+    },
+    "description": "Serves the Silte zone with a focus on business, economics, and health."
+  },
+  {
+    "name": "Bonga University",
+    "address": {
+      "city": "Bonga",
+      "region": "South West Ethiopia",
+      "zone": "Kaffa"
+    },
+    "description": "Located in the birthplace of coffee (Kaffa), specializing in coffee science, spices, and tourism."
+  },
+  {
+    "name": "Debark University",
+    "address": { "city": "Debark", "region": "Amhara", "zone": "North Gondar" },
+    "description": "Gateway to the Simien Mountains, focusing heavily on tourism and mountain ecology."
+  },
+  {
+    "name": "Dembidollo University",
+    "address": {
+      "city": "Dembidollo",
+      "region": "Oromia",
+      "zone": "Qellam Wollega"
+    },
+    "description": "A modern university expanding access to higher education in western Oromia."
+  },
+  {
+    "name": "Salale University",
+    "address": { "city": "Fiche", "region": "Oromia", "zone": "North Shewa" },
+    "description": "Focuses on dairy science and highland agriculture."
+  },
+  {
+    "name": "Kebri Dehar University",
+    "address": { "city": "Kebri Dehar", "region": "Somali", "zone": "Korahe" },
+    "description": "One of the newest universities, serving the deep Somali region."
+  },
+  {
+    "name": "Mekdela Amba University",
+    "address": {
+      "city": "Tulu Awuliya",
+      "region": "Amhara",
+      "zone": "South Wollo"
+    },
+    "description": "Established to serve the rural communities of South Wollo."
+  },
+  {
+    "name": "Borena University",
+    "address": { "city": "Yabello", "region": "Oromia", "zone": "Borena" },
+    "description": "A newer university focused on rangeland management and livestock production."
+  },
+  {
+    "name": "Ethiopian Civil Service University",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "CMC Road"
+    },
+    "description": "Dedicated to training civil servants and public sector leaders."
+  },
+  {
+    "name": "Kotebe University of Education",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Yeka"
+    },
+    "description": "The premier teacher training and education policy institution in Ethiopia."
+  },
+  {
+    "name": "Defense University",
+    "address": { "city": "Bishoftu", "region": "Oromia", "zone": "East Shewa" },
+    "description": "Operated by the Ministry of Defense, training military personnel in engineering and health sciences."
+  },
+  {
+    "name": "St. Mary's University",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Mexico/Bole"
+    },
+    "description": "A top-tier private university known for business, journalism, and its extensive distance learning network."
+  },
+  {
+    "name": "Unity University",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Gerji"
+    },
+    "description": "The first private institute to gain university status in Ethiopia, offering diverse programs."
+  },
+  {
+    "name": "Rift Valley University",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa (HQ)",
+      "zone": "Gotera"
+    },
+    "description": "The largest private university by campus count, with branches across Oromia and other regions."
+  },
+  {
+    "name": "Admas University",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Olympia"
+    },
+    "description": "A well-established private university known for Business, IT, and distance education."
+  },
+  {
+    "name": "HiLCoE School of Computer Science",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Arat Kilo"
+    },
+    "description": "A specialized private college highly respected for its Computer Science and Software Engineering programs."
+  },
+  {
+    "name": "Addis Ababa Medical and Business College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Piassa"
+    },
+    "description": "Focuses on health sciences (Nursing, Pharmacy) and business administration."
+  },
+  {
+    "name": "MicroLink Information Technology College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Specializes in IT, hardware engineering, and short-term technical training."
+  },
+  {
+    "name": "New Generation University College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Offers undergraduate programs in business, finance, and social sciences."
+  },
+  {
+    "name": "CPU Business and Computer College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Arat Kilo"
+    },
+    "description": "One of the older private colleges, known for computer training and business management."
+  },
+  {
+    "name": "Alpha University College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Offers distance and regular programs in economics, management, and accounting."
+  },
+  {
+    "name": "Gage College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Piasa"
+    },
+    "description": "A large private college with multiple campuses, known for vocational and degree programs."
+  },
+  {
+    "name": "Hope University College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Lebu"
+    },
+    "description": "Affiliated with Hope Enterprises, focusing on holistic education and professional development."
+  },
+  {
+    "name": "Dandii Boru College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Wello Sefer"
+    },
+    "description": "Well-known for its schools and college programs in business and social sciences."
+  },
+  {
+    "name": "Yared Valley College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "CMC"
+    },
+    "description": "A private college offering training in business, construction, and law."
+  },
+  {
+    "name": "Hayat Medical College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "One of the first private medical colleges, training nurses, midwives, and health officers."
+  },
+  {
+    "name": "Bethel Medical College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Kolfe"
+    },
+    "description": "Associated with Bethel Teaching Hospital, offering degrees in Medicine and Nursing."
+  },
+  {
+    "name": "KEA-MED Medical College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Piasa"
+    },
+    "description": "A private health science college known for clinical nursing and pharmacy programs."
+  },
+  {
+    "name": "Atlas College of Health Sciences",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Focuses on dental medicine and other specialized health fields."
+  },
+  {
+    "name": "Lucy College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Mexico"
+    },
+    "description": "Offers business and organizational management programs."
+  },
+  {
+    "name": "Yardstick International College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Known for leadership, management, and distance education certification programs."
+  },
+  {
+    "name": "Global College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Provides education in business, IT, and social work."
+  },
+  {
+    "name": "Grand College",
+    "address": { "city": "Bahir Dar", "region": "Amhara", "zone": "Bahir Dar" },
+    "description": "A prominent private college in the Amhara region focusing on business and technology."
+  },
+  {
+    "name": "Harambee University",
+    "address": { "city": "Adama", "region": "Oromia", "zone": "East Shewa" },
+    "description": "Based in Adama with campuses in other cities, offering diverse undergraduate programs."
+  },
+  {
+    "name": "Leadstar College of Management and Leadership",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Focuses on MBA programs and leadership training, often in partnership with foreign universities."
+  },
+  {
+    "name": "Grace College of Business and Computer Science",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Megenagna"
+    },
+    "description": "A private institution offering focused degrees in accounting, management, and CS."
+  },
+  {
+    "name": "Africa Beza College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Bole"
+    },
+    "description": "Specializes in business and information technology across multiple campuses."
+  },
+  {
+    "name": "Enat College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Kality"
+    },
+    "description": "Focuses on nursing and community health training."
+  },
+  {
+    "name": "Queens College",
+    "address": {
+      "city": "Addis Ababa",
+      "region": "Addis Ababa",
+      "zone": "Haya Hulet"
+    },
+    "description": "Offers diverse courses in accounting, business, and information systems."
+  }
+]

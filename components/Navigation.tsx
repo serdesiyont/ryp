@@ -15,6 +15,7 @@ interface NavigationProps {
 
 export default function Navigation({ isHomepage = false }: NavigationProps) {
   const router = useRouter();
+  const showSearch = !isHomepage;
   const { session } = useAuth();
   const fullName = session?.user?.name || "";
   const userName = fullName.split(" ")[0] || "User";
@@ -181,7 +182,7 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
         </Link>
 
         <div className="flex items-center gap-1">
-          {!isHomepage && (
+          {showSearch && (
             <div className="relative" ref={mobileSearchRef}>
               <button
                 onClick={() => setShowMobileSearch(!showMobileSearch)}
@@ -326,7 +327,7 @@ export default function Navigation({ isHomepage = false }: NavigationProps) {
           RYP
         </Link>
 
-        {!isHomepage && (
+        {showSearch && (
           <div className="flex items-center gap-3 mr-40">
             <div className="relative">
               <select

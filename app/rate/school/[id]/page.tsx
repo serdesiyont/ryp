@@ -4,6 +4,7 @@ import Link from "next/link";
 import { use, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { RatingScale } from "@/components/RatingScale";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -14,12 +15,30 @@ import {
 } from "@/lib/api/schools";
 import type { Review, School } from "@/lib/types";
 
-const ratingColor = (value: number) => {
-  if (value <= 1) return "#dc2626";
-  if (value <= 2) return "#f2994a";
-  if (value <= 3) return "#facc15";
-  if (value <= 4) return "#8ecf6f";
-  return "#16a34a";
+const CATEGORIES: { key: keyof SchoolRatingsState; label: string }[] = [
+  { key: "reputation", label: "Reputation" },
+  { key: "safety", label: "Safety" },
+  { key: "happiness", label: "Happiness" },
+  { key: "clubs", label: "Clubs" },
+  { key: "social", label: "Social" },
+  { key: "location", label: "Location" },
+  { key: "opportunities", label: "Opportunities" },
+  { key: "facilities", label: "Facilities" },
+  { key: "internet", label: "Internet" },
+  { key: "food", label: "Food" },
+];
+
+type SchoolRatingsState = {
+  reputation: number;
+  location: number;
+  opportunities: number;
+  facilities: number;
+  internet: number;
+  safety: number;
+  food: number;
+  clubs: number;
+  happiness: number;
+  social: number;
 };
 
 export default function SchoolRatingDetail({
@@ -200,12 +219,12 @@ export default function SchoolRatingDetail({
       <Header />
 
       <main className="max-w-3xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <p className="text-sm text-gray-600 mb-2">
-            {selectedSchoolData.location}
+        <div className="mb-6">
+          <p className="text-sm font-medium uppercase tracking-wide text-gray-900">
+            Add Rating
           </p>
-          <h1 className="text-4xl font-bold mb-1">{selectedSchoolData.name}</h1>
-          <p className="text-lg text-gray-600">Add Rating</p>
+          <h1 className="text-3xl font-bold">{selectedSchoolData.name}</h1>
+          <p className="text-sm text-gray-500">{selectedSchoolData.location}</p>
 
           {loadError ? (
             <p className="mt-2 text-sm text-destructive">{loadError}</p>
@@ -225,316 +244,47 @@ export default function SchoolRatingDetail({
           )}
         </div>
 
-        {/* Reputation */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Reputation <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("reputation", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.reputation && ratings.reputation > 0
-                      ? ratingColor(ratings.reputation)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
+        {/* Rating categories — compact grid */}
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-semibold">Rate this school</h2>
+            <span className="text-xs text-gray-400">1 Awful – 5 Awesome</span>
+          </div>
+          <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+            {CATEGORIES.map((cat) => (
+              <RatingScale
+                key={cat.key}
+                label={cat.label}
+                required
+                value={ratings[cat.key]}
+                onChange={(v) => handleRatingChange(cat.key, v)}
               />
             ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Safety */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Safety <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("safety", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.safety && ratings.safety > 0
-                      ? ratingColor(ratings.safety)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Happiness */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Happiness <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("happiness", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.happiness && ratings.happiness > 0
-                      ? ratingColor(ratings.happiness)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Clubs */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Clubs <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("clubs", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.clubs && ratings.clubs > 0
-                      ? ratingColor(ratings.clubs)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Social */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Social <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("social", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.social && ratings.social > 0
-                      ? ratingColor(ratings.social)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Location */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Location <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("location", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.location && ratings.location > 0
-                      ? ratingColor(ratings.location)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Opportunities */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Opportunities <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("opportunities", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.opportunities && ratings.opportunities > 0
-                      ? ratingColor(ratings.opportunities)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Facilities and common areas */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Facilities and common areas <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("facilities", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.facilities && ratings.facilities > 0
-                      ? ratingColor(ratings.facilities)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Internet */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Internet <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("internet", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.internet && ratings.internet > 0
-                      ? ratingColor(ratings.internet)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
-          </div>
-        </div>
-
-        {/* Food */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-4">
-            Food <span className="text-red-500">*</span>
-          </h2>
-          <div className="flex justify-center gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map((level) => (
-              <button
-                key={level}
-                onClick={() => handleRatingChange("food", level)}
-                style={{
-                  backgroundColor:
-                    level <= ratings.food && ratings.food > 0
-                      ? ratingColor(ratings.food)
-                      : "#e5e7eb",
-                }}
-                className="w-12 h-12 rounded-lg transition"
-              />
-            ))}
-          </div>
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>1 - Awful</span>
-            <span>5 - Awesome</span>
           </div>
         </div>
 
         {/* Write a Review */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <h2 className="font-semibold mb-3">Write a Review</h2>
-          <p className="text-sm text-gray-600 mb-4">
-            Discuss your personal experience on this school. What's great about
-            it? What could use improvement?
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
+          <h2 className="font-semibold">Write a Review</h2>
+          <p className="mb-3 text-sm text-gray-500">
+            What's great about this school? What could use improvement?
           </p>
-
-          {/* Guidelines */}
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-            <div className="flex items-start gap-3">
-              <span className="text-lg font-bold">ℹ</span>
-              <div>
-                <button className="font-semibold text-sm mb-2 hover:underline">
-                  Guidelines
-                </button>
-                <ul className="hidden space-y-1 text-sm text-gray-700">
-                  <li>
-                    • Your rating could be removed if you use profanity or
-                    derogatory terms.
-                  </li>
-                  <li>
-                    • Refer to the rating categories to help you better
-                    elaborate your comments.
-                  </li>
-                  <li>• Don't forget to proof read!</li>
-                </ul>
-                <button className="text-sm text-blue-600 hover:underline">
-                  View all guidelines
-                </button>
-              </div>
-            </div>
-          </div>
-
           <textarea
             placeholder="What do you want other students to know about this school?"
             value={review}
             onChange={(e) => setReview(e.target.value)}
             maxLength={350}
-            rows={8}
-            className="w-full resize-none rounded border border-blue-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            rows={5}
+            className="w-full resize-none rounded-lg border border-gray-200 px-4 py-3 text-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
           />
-          <div className="mt-1 text-right text-sm text-gray-600">
+          <div className="mt-1 text-right text-xs text-gray-400">
             {review.length}/350
           </div>
         </div>
 
         {/* Terms and Conditions */}
-        <div className="bg-white rounded-lg p-6 mb-6 text-center text-sm">
-          <p className="mb-3">
+        <div className="mb-4 text-center text-xs text-gray-500">
+          <p>
             By clicking the "Submit" button, I acknowledge that I have read and
             agreed to the Rate My Professors{" "}
             <Link href="#" className="text-blue-600 hover:underline">
@@ -556,7 +306,7 @@ export default function SchoolRatingDetail({
         <div className="flex justify-center mb-8">
           <Button
             onClick={handleSubmit}
-            className="rounded-full bg-gray-500 px-12 py-3 text-white hover:bg-gray-600"
+            className="rounded-full bg-gray-900 px-12 py-3 text-white hover:bg-black"
             disabled={submitting}
           >
             {submitting ? "Submitting..." : "Submit Rating"}

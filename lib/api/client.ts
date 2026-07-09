@@ -1,4 +1,11 @@
-const DEFAULT_BASE_URL = "http://localhost:3000";
+// All backend functionality now runs natively inside this Next.js app under
+// /api/*. Data endpoints therefore live on the same origin as the frontend.
+//
+// In the browser we use relative URLs (same-origin) so cookies are always sent.
+// On the server (React Server Components / route handlers) `fetch` needs an
+// absolute URL, so we resolve the app's own origin from the environment.
+
+const API_PREFIX = "/api";
 
 export class ApiError extends Error {
   status: number;
@@ -9,18 +16,30 @@ export class ApiError extends Error {
   }
 }
 
-export function getApiBaseUrl(): string {
-  return (
+function getServerOrigin(): string {
+  const explicit =
     process.env.NEXT_PUBLIC_API_BASE_URL ||
-    process.env.API_BASE_URL ||
-    DEFAULT_BASE_URL
-  );
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.API_BASE_URL;
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const port = process.env.PORT || "4000";
+  return `http://localhost:${port}`;
+}
+
+export function getApiBaseUrl(): string {
+  // Browser → same-origin (relative). Server → absolute self origin.
+  if (typeof window !== "undefined") return "";
+  return getServerOrigin();
 }
 
 function buildUrl(path: string) {
   const base = getApiBaseUrl().replace(/\/$/, "");
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  return `${base}${normalized}`;
+  const withPrefix = normalized.startsWith(`${API_PREFIX}/`)
+    ? normalized
+    : `${API_PREFIX}${normalized}`;
+  return `${base}${withPrefix}`;
 }
 
 export async function apiFetch<T>(
@@ -28,13 +47,16 @@ export async function apiFetch<T>(
   init: RequestInit = {}
 ): Promise<T> {
   const url = buildUrl(path);
+  // Default to no-store, but don't force it when the caller opted into Next's
+  // revalidate caching (combining the two is a hard error in Next.js).
+  const hasNextCache = "next" in init && init.next != null;
   const response = await fetch(url, {
     ...init,
     headers: {
       Accept: "application/json",
       ...init.headers,
     },
-    cache: init.cache ?? "no-store",
+    ...(init.cache || hasNextCache ? {} : { cache: "no-store" }),
   });
 
   if (!response.ok) {
