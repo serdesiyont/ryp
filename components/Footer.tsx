@@ -19,13 +19,25 @@ export default function Footer() {
           </Link>
         </div>
 
+        <nav className="flex gap-5 text-xs font-medium text-gray-500">
+          <Link href="/guidelines" className="hover:text-black hover:underline">
+            Review Guidelines
+          </Link>
+          <Link href="/privacy" className="hover:text-black hover:underline">
+            Privacy
+          </Link>
+          <Link href="/terms" className="hover:text-black hover:underline">
+            Terms
+          </Link>
+        </nav>
+
         <p className="text-xs text-gray-400">
           © {new Date().getFullYear()} RYP. All rights reserved.
         </p>
 
         <div className="flex gap-5">
           <a
-            href="mailto:contact@rateyourprofessors.com"
+            href="mailto:serdesiyon@gmail.com"
             aria-label="Email"
             className="text-gray-400 transition-colors hover:text-black"
           >
@@ -45,7 +57,7 @@ export default function Footer() {
             </svg>
           </a>
           <a
-            href="https://github.com"
+            href="https://github.com/serdesiyont/ryp"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
@@ -62,7 +74,7 @@ export default function Footer() {
             </svg>
           </a>
           <a
-            href="https://t.me"
+            href="https://t.me/hybridconcepts"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Telegram"

@@ -494,7 +494,7 @@ export default function ProfessorRatingDetail({
         <div className="mb-4 text-center text-xs text-gray-500">
           <p>
             By clicking "Submit", I acknowledge that I have read and agreed to
-            the Rate My Professors{" "}
+            the Rate Your Professors{" "}
             <Link href="#" className="text-blue-600 hover:underline">
               Site Guidelines
             </Link>

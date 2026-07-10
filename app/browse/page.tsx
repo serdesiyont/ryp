@@ -186,7 +186,7 @@ function BrowseContent() {
             Browse
           </h1>
           <p className="mt-2 text-gray-600">
-            Explore {professors.length} professors and {schools.length} schools
+            Explore {professors.length} professors and {schools.length} universities
             — find your next class with confidence.
           </p>
         </div>
@@ -216,7 +216,7 @@ function BrowseContent() {
             }`}
           >
             <Building2 className="h-4 w-4" />
-            Schools
+            Universities
             <span className="rounded-full bg-gray-200 px-2 text-xs text-gray-700">
               {schools.length}
             </span>
@@ -232,8 +232,8 @@ function BrowseContent() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder={
                 isProf
-                  ? "Search professors, departments, schools…"
-                  : "Search schools or locations…"
+                  ? "Search professors, departments…"
+                  : "Search universities or locations…"
               }
               className="w-full rounded-full border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
             />

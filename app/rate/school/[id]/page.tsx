@@ -286,7 +286,7 @@ export default function SchoolRatingDetail({
         <div className="mb-4 text-center text-xs text-gray-500">
           <p>
             By clicking the "Submit" button, I acknowledge that I have read and
-            agreed to the Rate My Professors{" "}
+            agreed to the Rate Your Professors{" "}
             <Link href="#" className="text-blue-600 hover:underline">
               Site Guidelines
             </Link>
@@ -298,7 +298,7 @@ export default function SchoolRatingDetail({
             <Link href="#" className="text-blue-600 hover:underline">
               Privacy Policy
             </Link>
-            . Submitted data becomes the property of Rate My Professors.
+            . Submitted data becomes the property of Rate Your Professors.
           </p>
         </div>
 

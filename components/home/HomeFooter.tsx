@@ -25,17 +25,17 @@ export default function HomeFooter() {
             </h5>
             <ul className="space-y-4 text-sm font-bold">
               <li>
-                <Link href="/browse" className="hover:underline">
+                <Link href="/browse?tab=schools" className="hover:underline">
                   All Universities
                 </Link>
               </li>
               <li>
-                <Link href="/browse" className="hover:underline">
+                <Link href="/browse?tab=professors" className="hover:underline">
                   Top Rated Professors
                 </Link>
               </li>
               <li>
-                <Link href="/browse" className="hover:underline">
+                <Link href="/browse?tab=schools" className="hover:underline">
                   Department Rankings
                 </Link>
               </li>
@@ -48,17 +48,17 @@ export default function HomeFooter() {
             </h5>
             <ul className="space-y-4 text-sm font-bold">
               <li>
-                <Link href="#" className="hover:underline">
+                <Link href="/guidelines" className="hover:underline">
                   Review Guidelines
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:underline">
+                <Link href="/privacy" className="hover:underline">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:underline">
+                <Link href="/terms" className="hover:underline">
                   Terms of Service
                 </Link>
               </li>
@@ -72,7 +72,7 @@ export default function HomeFooter() {
           </p>
           <div className="flex gap-6">
             <a
-              href="mailto:contact@rateyourprofessors.com"
+              href="mailto:serdesiyon@gmail.com"
               aria-label="Email"
               className="text-neutral-500 transition-colors hover:text-black"
             >
@@ -92,7 +92,7 @@ export default function HomeFooter() {
               </svg>
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/serdesiyont/ryp"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
@@ -109,7 +109,7 @@ export default function HomeFooter() {
               </svg>
             </a>
             <a
-              href="https://t.me"
+              href="https://t.me/hybridconcepts"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Telegram"

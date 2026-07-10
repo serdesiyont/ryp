@@ -245,8 +245,22 @@ export function SignupForm() {
                       Agree to the basics
                     </FormLabel>
                     <FormDescription className="text-xs text-muted-foreground">
-                      By creating an account you accept our Terms, Privacy
-                      Policy, and community guidelines.
+                      By creating an account you accept our{" "}
+                      <a href="/terms" className="underline hover:text-foreground">
+                        Terms
+                      </a>
+                      ,{" "}
+                      <a href="/privacy" className="underline hover:text-foreground">
+                        Privacy Policy
+                      </a>
+                      , and{" "}
+                      <a
+                        href="/guidelines"
+                        className="underline hover:text-foreground"
+                      >
+                        community guidelines
+                      </a>
+                      .
                     </FormDescription>
                   </div>
                   <FormMessage />

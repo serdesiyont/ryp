@@ -14,7 +14,7 @@ const siteUrl =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Rate My Professors",
+  title: "Rate Your Professors",
   description: "Find and rate professors at your university",
   keywords: ["rate my professors", "rate your professor"],
   alternates: {
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: "/",
-    siteName: "Rate My Professors",
-    title: "Rate My Professors",
+    siteName: "Rate Your Professors",
+    title: "Rate Your Professors",
     description: "Find and rate professors at your university",
     type: "website",
   },
