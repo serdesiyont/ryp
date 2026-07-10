@@ -172,7 +172,7 @@ export function LecturerForm() {
             <FormItem>
               <FormLabel>Lecturer name</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Dr. Jane Doe" {...field} />
+                <Input placeholder="e.g., Dr. Samson" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -198,7 +198,7 @@ export function LecturerForm() {
                   <FormControl>
                     <div className="relative">
                       <Input
-                        placeholder="e.g., Stanford University"
+                        placeholder="e.g., Addis Ababa University"
                         autoComplete="off"
                         {...field}
                         onFocus={(e) => {
@@ -274,7 +274,7 @@ export function LecturerForm() {
                 <Input
                   value={courseInput}
                   onChange={(e) => setCourseInput(e.target.value)}
-                  placeholder="e.g., CS229"
+                  placeholder="e.g., Database Systems"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       e.preventDefault();
