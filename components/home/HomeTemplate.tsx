@@ -1,4 +1,5 @@
 import HeroSection from "@/components/home/HeroSection";
+import AboutSection from "@/components/home/AboutSection";
 import StatsSection from "@/components/home/StatsSection";
 import TopUniversitiesSection from "@/components/home/TopUniversitiesSection";
 import LatestReviewsSection from "@/components/home/LatestReviewsSection";
@@ -14,6 +15,7 @@ export default function HomeTemplate({ stats }: HomeTemplateProps) {
   return (
     <>
       <HeroSection />
+      <AboutSection />
       <StatsSection
         campusCount={stats?.campusCount ?? 0}
         lecturerCount={stats?.lecturerCount ?? 0}

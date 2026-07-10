@@ -37,8 +37,22 @@ export default function TopUniversitiesSection({
                 key={campus._id}
                 className="rounded-sm border border-black/5 p-6 transition-all hover:scale-105 hover:border-black hover:bg-neutral-100"
               >
-                <div className="mb-6 flex aspect-square items-center justify-center bg-neutral-200 text-5xl">
-                  🎓
+                <div className="relative mb-6 flex aspect-square items-center justify-center overflow-hidden rounded-sm border border-black/10 bg-[#FAF3DD]">
+                  <svg
+                    viewBox="0 0 100 100"
+                    className="h-1/2 w-1/2 text-black"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M10 32 50 12 90 32" />
+                    <path d="M14 40H86" />
+                    <path d="M22 40v38M38 40v38M50 40v38M62 40v38M78 40v38" />
+                    <path d="M10 84h80M6 92h88" />
+                  </svg>
                 </div>
                 <h3 className="mb-2 text-xl font-bold">{campus.name}</h3>
                 <div className="mb-4 flex items-center gap-2">
